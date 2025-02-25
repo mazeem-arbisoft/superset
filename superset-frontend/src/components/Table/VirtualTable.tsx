@@ -20,7 +20,7 @@
 import AntTable, {
   TablePaginationConfig,
   TableProps as AntTableProps,
-} from 'antd/lib/table';
+} from 'antd-v5/lib/table';
 import classNames from 'classnames';
 import { useResizeDetector } from 'react-resize-detector';
 import { useEffect, useRef, useState, useCallback, CSSProperties } from 'react';
@@ -29,7 +29,8 @@ import { useTheme, styled, safeHtmlSpan } from '@superset-ui/core';
 
 import { TableSize, ETableAction } from './index';
 
-interface VirtualTableProps<RecordType> extends AntTableProps<RecordType> {
+export interface VirtualTableProps<RecordType>
+  extends AntTableProps<RecordType> {
   height?: number;
   allowHTML?: boolean;
 }
@@ -45,26 +46,6 @@ const StyledCell = styled('div')<{ height?: number }>(
   transition: background 0.3s;
   line-height: ${height}px;
   box-sizing: border-box;
-`,
-);
-
-const StyledTable = styled(AntTable)<{ height?: number }>(
-  ({ theme }) => `
-    th.ant-table-cell {
-      font-weight: ${theme.typography.weights.bold};
-      color: ${theme.colors.grayscale.dark1};
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ant-pagination-item-active {
-      border-color: ${theme.colors.primary.base};
-      }
-    }
-    .ant-table.ant-table-small {
-      font-size: ${theme.typography.sizes.s}px;
-    }
 `,
 );
 
@@ -183,7 +164,10 @@ const VirtualTable = <RecordType extends object>(
     );
   };
 
-  const renderVirtualList = (rawData: object[], { ref, onScroll }: any) => {
+  const renderVirtualList = (
+    rawData: readonly object[],
+    { ref, onScroll }: any,
+  ) => {
     // eslint-disable-next-line no-param-reassign
     ref.current = connectObject;
     const cellSize = size === TableSize.Middle ? MIDDLE : SMALL;
@@ -254,7 +238,7 @@ const VirtualTable = <RecordType extends object>(
 
   return (
     <div ref={ref}>
-      <StyledTable
+      <AntTable
         {...props}
         sticky={false}
         className="virtual-table"
